@@ -1,4 +1,50 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 # C166 synthetic machine trace events
+siemens_keypad_startup_release(uint64_t icount, uint32_t pc, uint16_t result) "icount=%" PRIu64 " pc=0x%06x result=0x%04x"
+siemens_keypad_deferred_release(uint64_t icount, uint32_t pc, const char *name, uint16_t raw, unsigned index, const char *phase) "icount=%" PRIu64 " pc=0x%06x name=%s raw=0x%04x index=%u phase=%s"
+siemens_keypad_matrix_select(uint64_t icount, uint32_t pc, uint16_t column, uint16_t command, uint16_t result, bool startup) "icount=%" PRIu64 " pc=0x%06x column=0x%04x command=0x%04x result=0x%04x startup=%d"
 c166_test_mmio(unsigned offset, uint64_t value) "offset=0x%x value=0x%" PRIx64
+siemens_twi(const char *model, const char *event, uint8_t address, bool read, uint8_t reg, uint8_t data, bool ack) "%s %s address=0x%02x read=%d register=0x%02x data=0x%02x ack=%d"
+pmb7850_reg(bool write, uint32_t addr, unsigned size, uint64_t value) "write=%d addr=0x%06x size=%u value=0x%" PRIx64
+pmb7850_internal_io(uint64_t tick, uint64_t icount, uint32_t pc, bool write, uint32_t addr, unsigned size, uint64_t value) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x write=%d addr=0x%06x size=%u value=0x%" PRIx64
+pmb7850_capcom_output(uint64_t tick, uint64_t icount, uint32_t pc, unsigned channel, bool level) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x channel=%u level=%d"
+pmb7850_bus(bool write, uint32_t addr, unsigned size, uint64_t value, const char *target, uint32_t offset) "write=%d addr=0x%06x size=%u value=0x%" PRIx64 " target=%s offset=0x%x"
+pmb7850_irq(uint64_t icount, uint32_t pc, const char *action, unsigned source, unsigned vector, unsigned ilvl, bool pec) "icount=%" PRIu64 " pc=0x%06x %s source=%u vector=0x%02x ilvl=%u pec=%d"
+pmb7850_pec(uint64_t icount, uint32_t pc, unsigned channel, uint32_t src, uint32_t dst, unsigned size, uint32_t value, unsigned before, unsigned after) "icount=%" PRIu64 " pc=0x%06x channel=%u src=0x%06x dst=0x%06x size=%u value=0x%x count=%u->%u"
+pmb7850_stack_write(uint64_t icount, uint32_t pc, uint32_t addr, unsigned size, uint64_t value) "icount=%" PRIu64 " pc=0x%06x addr=0x%04x size=%u value=0x%" PRIx64
+pmb7850_timer(uint64_t icount, uint32_t pc, const char *name, uint16_t value, bool wrapped) "icount=%" PRIu64 " pc=0x%06x %s value=0x%04x wrapped=%d"
+pmb7850_schedule(uint64_t icount, uint32_t pc, uint64_t delay, bool idle) "icount=%" PRIu64 " pc=0x%06x delay=%" PRIu64 " idle=%d"
+pmb7850_fast_cs0(uint64_t icount, uint32_t pc, bool enabled, uint16_t addrsel2, uint16_t buscon2) "icount=%" PRIu64 " pc=0x%06x enabled=%d ADDRSEL2=0x%04x BUSCON2=0x%04x"
+pmb7850_fast_cs(uint64_t icount, uint32_t pc, unsigned cs, bool enabled, uint32_t start, uint64_t size, unsigned mirrors, uint16_t selector, uint16_t buscon) "icount=%" PRIu64 " pc=0x%06x CS%u enabled=%d start=0x%06x size=0x%" PRIx64 " mirrors=%u selector=0x%04x BUSCON=0x%04x"
+pmb7850_fast_lm(uint64_t icount, uint32_t pc, bool low, bool full, uint16_t syscon) "icount=%" PRIu64 " pc=0x%06x low=%d full=%d SYSCON=0x%04x"
+pmb7850_tdma(uint64_t icount, uint32_t pc, uint16_t before, uint16_t after, uint16_t top) "icount=%" PRIu64 " pc=0x%06x counter=0x%04x->0x%04x top=0x%04x"
+pmb7850_tdma_irq(uint64_t icount, uint32_t pc, const char *name, uint16_t compare, uint16_t counter, bool pending) "icount=%" PRIu64 " pc=0x%06x %s compare=0x%04x counter=0x%04x already-pending=%d"
+pmb7850_port(unsigned port, unsigned bit, bool level, bool output) "P%u.%u level=%d output=%d"
+pmb7850_serial(uint64_t icount, uint32_t pc, const char *unit, const char *action, uint32_t value) "icount=%" PRIu64 " pc=0x%06x %s %s value=0x%x"
+pmb7850_adc(unsigned channel, int value) "channel=%u raw=%d"
+pmb7850_adc_conversion(uint64_t icount, uint32_t pc, uint16_t command, unsigned channel, int value, unsigned result_word, uint16_t result0, uint16_t result1) "icount=%" PRIu64 " pc=0x%06x command=0x%04x channel=%u raw=%d result_word=%u result0=0x%04x result1=0x%04x"
+siemens_battery_state(uint64_t icount, uint32_t pc, unsigned level, bool charging, unsigned millivolts, int raw) "icount=%" PRIu64 " pc=0x%06x level=%u charging=%d millivolts=%u raw=%d"
+pmb7850_ssc(uint64_t icount, uint32_t pc, const char *phase, uint32_t value, unsigned bits, bool msb_first, unsigned divisor, bool queued) "icount=%" PRIu64 " pc=0x%06x phase=%s value=0x%x bits=%u msb-first=%d divisor=%u queued=%d"
+pmb7850_lifecycle(uint64_t icount, uint32_t pc, const char *action) "icount=%" PRIu64 " pc=0x%06x %s"
+pmb7850_sim_control(uint64_t icount, uint32_t pc, uint16_t before, uint16_t control, const char *phase) "icount=%" PRIu64 " pc=0x%06x before=0x%04x control=0x%04x phase=%s"
+pmb7850_sim_irq(uint64_t icount, uint32_t pc, uint16_t addr, bool already_pending, const char *reason) "icount=%" PRIu64 " pc=0x%06x addr=0x%04x already-pending=%d reason=%s"
+pmb7850_sim_byte(uint64_t icount, uint32_t pc, const char *direction, uint8_t value, uint64_t sequence, const char *path) "icount=%" PRIu64 " pc=0x%06x direction=%s value=0x%02x sequence=%" PRIu64 " path=%s"
+pmb7850_sim_apdu(uint64_t icount, uint32_t pc, uint64_t command, uint64_t selection, uint16_t status, unsigned response) "icount=%" PRIu64 " pc=0x%06x command=0x%014" PRIx64 " selection=0x%016" PRIx64 " status=0x%04x response=%u"
+siemens_xbus_access(uint64_t icount, uint32_t pc, bool write, uint32_t addr, unsigned size, uint64_t value) "icount=%" PRIu64 " pc=0x%06x write=%d addr=0x%06x size=%u value=0x%04" PRIx64
+siemens_xbus_mailbox(uint64_t icount, uint32_t pc, const char *phase, uint64_t transaction, uint16_t status, uint16_t result, bool irq, uint16_t control, bool async) "icount=%" PRIu64 " pc=0x%06x phase=%s transaction=%" PRIu64 " status=0x%04x result=0x%04x irq=%d control=0x%04x async=%d"
+siemens_keypad_access(uint64_t icount, uint32_t pc, bool write, uint32_t offset, unsigned size, uint64_t value, uint16_t command, uint16_t result, bool acknowledged) "icount=%" PRIu64 " pc=0x%06x write=%d offset=0x%02x size=%u value=0x%04" PRIx64 " command=0x%04x result=0x%04x acknowledged=%d"
+siemens_keypad_input(uint64_t icount, uint32_t pc, const char *name, uint16_t raw, uint8_t logical, bool pressed) "icount=%" PRIu64 " pc=0x%06x name=%s raw=0x%04x logical=0x%02x pressed=%d"
+
+# Host service diagnostics, serialized by the QMP main loop.
+siemens_host_service(uint64_t icount, const char *event) "icount=%" PRIu64 " event=%s"
+
+# Synthetic read side effect used to qualify replay and debugger inspection.
 c166_test_mmio_read(uint64_t offset, unsigned value, unsigned size) "offset=0x%" PRIx64 " value=0x%x size=%u"
+
+# Deadline diagnostics do not enable the raw-step fallback.
+pmb7850_deadline(uint64_t icount, uint32_t pc, uint64_t tick, int64_t now, uint64_t sources, int64_t previous, int64_t requested, const char *action) "icount=%" PRIu64 " pc=0x%06x tick=%" PRIu64 " now=%" PRId64 " sources=0x%" PRIx64 " previous=%" PRId64 " requested=%" PRId64 " action=%s"
+pmb7850_deadline_capcom(unsigned timer, uint16_t value, uint16_t reload, uint16_t ic) "timer=%u value=0x%04x reload=0x%04x ic=0x%04x"
+pmb7850_deadline_compare(unsigned channel, uint16_t ic, bool observed) "channel=%u ic=0x%04x observed=%d"
+pmb7850_capcom_capture(uint64_t icount, uint32_t pc, uint64_t tick, unsigned channel, uint16_t value) "icount=%" PRIu64 " pc=0x%06x tick=%" PRIu64 " channel=%u value=0x%04x"
+
+pmb7850_idle_clock(uint64_t icount, uint32_t pc, uint64_t tick, int64_t now, uint64_t elapsed, uint64_t advanced) "icount=%" PRIu64 " pc=0x%06x tick=%" PRIu64 " now=%" PRId64 " elapsed=%" PRIu64 " advanced=%" PRIu64 ""

@@ -149,6 +149,10 @@ qtests_alpha = ['boot-serial-test'] + \
 
 qtests_avr = [ 'boot-serial-test' ]
 
+qtests_c166 = [ 'c166-am29-test', 'c166-m58-test', 'c166-w30-test',
+                'c166-x55-test',
+                'pmb7850-soc-test', 'siemens-c55-test' ]
+
 qtests_hppa = \
   qtests_filter + \
   (config_all_devices.has_key('CONFIG_VGA') ? ['display-vga-test'] : [])
@@ -437,6 +441,10 @@ endif
 
 if dbus_display
   qtests += {'dbus-display-test': [dbus_display1, gio]}
+  if host_os != 'windows'
+    qtests_c166 += ['c166-audio-dbus-test']
+    qtests += {'c166-audio-dbus-test': [dbus_display1, gio]}
+  endif
 endif
 
 qtest_executables = {}

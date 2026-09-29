@@ -1,0 +1,21 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+c166_ss.add(when: 'CONFIG_PMB7850', if_true: files('battery.c',
+                                                  'devices.c',
+                                                  'keypad.c',
+                                                  'machine.c',
+                                                  'twi.c',
+                                                  'xbus.c',
+                                                  'devices/a52.c',
+                                                  'devices/a55.c',
+                                                  'devices/a60.c',
+                                                  'devices/a62.c',
+                                                  'devices/a65.c',
+                                                  'devices/c55.c',
+                                                  'devices/c60.c',
+                                                  'devices/cf62.c',
+                                                  'devices/common.c',
+                                                  'devices/m55.c',
+                                                  'devices/mc60.c',
+                                                  'devices/s55.c',
+                                                  'devices/sl55.c'))

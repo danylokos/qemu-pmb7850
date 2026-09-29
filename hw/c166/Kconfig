@@ -4,3 +4,17 @@ config C166_TEST
     bool
     default y
     depends on C166
+
+config PMB7850
+    bool
+    default y
+    depends on C166
+    select SSI
+    select AM29LV
+    select M58LW064D
+    select HM17
+    select PCF8813
+    select PCF8833
+    select S6B33BX
+    select SIEMENS_X55_RAM
+    select W30

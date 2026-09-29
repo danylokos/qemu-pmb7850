@@ -1,0 +1,132 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+{
+  "schema": "pmb7850-qemu-x55-matrix",
+  "schema_version": 2,
+  "synchronization_unit": "soc_ticks",
+  "devices": {
+    "a52": {
+      "image": "fw/A52/v.09/ff/A52lg1Sw09_80-40_FF.bin",
+      "sha256": "1aeb0d3e0329715dbb7ffc57829c14aa7af91fbfd59399e6ec3915d461815a35",
+      "topology": [{"role": "primary", "model": "m58lw064d", "size": 4194304}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x0129ee", "minimum_frames": 1},
+      "ui": {"trigger_frame": 1, "response_frame": 2, "key": "soft-left", "maximum_ticks": 100000000},
+      "sim": {"minimum_ticks": 100000000, "minimum_apdus": 1, "workflow": "interactive-test-sim-menu"}
+    },
+    "a55": {
+      "image": "fw/A55/v.09/ff/SIEMENS A55 LG7 V9 - 00800000.FLS",
+      "sha256": "7e7b1eb018dc2eb26dd41fda3565fab0f12d368a833825c0b189bb42394afe61",
+      "topology": [{"role": "primary", "model": "m58lw064d", "size": 8388608}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "no_sim": {"minimum_ticks": 20000000, "minimum_frames": 1},
+      "ui": {"trigger_frame": 1, "response_frame": 2, "key": "soft-left", "maximum_ticks": 100000000},
+      "sim": {"minimum_ticks": 20000000, "minimum_apdus": 1}
+    },
+    "a60": {
+      "image": "fw/A60/v.27/ff/A60lg91Sw27_80-80_FF.bin",
+      "sha256": "ccd8459c2c0af4dc30c323c4135ab36d00b71918e5d3304e284c4b70bb14a20b",
+      "topology": [{"role": "primary", "model": "am29lv640mh", "size": 8388608}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "performance_baseline_ticks_per_s": 7410000,
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x01a9c4", "minimum_frames": 2},
+      "ui": {"trigger_frame": 2, "response_frame": 3, "key": "soft-left", "maximum_ticks": 30000000},
+      "sim": {"minimum_ticks": 20000000, "minimum_apdus": 1}
+    },
+    "a62": {
+      "image": "fw/Fullflash/A62/v.07/A62_SW07_LG91_ed4e093e_repair_fullflash.bin",
+      "sha256": "ed4e093ea7d71e154c0420917b3ff67d66913a9733d968500c87a1f8c79cb677",
+      "topology": [{"role": "primary", "model": "am29lv640mh", "size": 8388608}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "performance_baseline_ticks_per_s": 7420000,
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x01a9c4", "minimum_frames": 2},
+      "ui": {"trigger_frame": 2, "response_frame": 4, "key": "soft-left", "maximum_ticks": 30000000},
+      "sim": {"minimum_ticks": 20000000, "minimum_apdus": 1}
+    },
+    "a65": {
+      "image": "fw/Fullflash/A65/v.15/A65_SW15_LG98_00578114_no-network-fix_flash-amd_fullflash.bin",
+      "sha256": "cead2ffd5f221d198d8094527a815290340b0d59fb0c951a33fe66315e342cf7",
+      "topology": [{"role": "primary", "model": "am29lv128mh", "size": 16777216}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "performance_baseline_ticks_per_s": 7160000,
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x01dd74", "minimum_frames": 2},
+      "ui": {"trigger_frame": 2, "response_frame": 3, "key": "soft-left", "maximum_ticks": 30000000},
+      "sim": {"minimum_ticks": 20000000, "minimum_apdus": 1},
+      "alternates": [
+        {"name": "sw07-amd", "image": "fw/A65/v.07/SIEMENS A65 LG91 V7_amd(sst).bin", "sha256": "fcb6d721578c95824cad08053f428c88f743ac67b9d5fa0b38bb014b0d3ece63", "topology": [{"role": "primary", "model": "am29lv128mh", "size": 16777216}]},
+        {"name": "sw07-intel", "image": "fw/A65/v.07/SIEMENS A65 LG91 V7_inte(SST).bin", "sha256": "498288147efe7419069ae3c0fdaeca9542f5e8aac5735dfddea311f7a8a8b96c", "topology": [{"role": "primary", "model": "w30-128mbit-top", "size": 16777216}]}
+      ]
+    },
+    "c55": {
+      "image": "fw/C55/v.24/ff/C55lg1Sw24_мой.bin",
+      "sha256": "bcb893b6b3ae94031f319e2d387e34679055c02e9cd6024d218a514f09954d75",
+      "topology": [{"role": "primary", "model": "m58lw064d", "size": 8388608}],
+      "identity": {"kind": "fsn", "value": "A35F2F28"},
+      "performance_baseline_ticks_per_s": 5970000,
+      "no_sim": {"minimum_ticks": 8000000, "expected_pc": "0x012a06", "minimum_frames": 0, "legacy_exact": true},
+      "ui": {"trigger_frame": 3, "response_frame": 5, "key": "soft-left", "maximum_ticks": 100000000, "legacy_exact": true},
+      "sim": {"minimum_ticks": 9000000, "expected_pc": "0x012a06", "minimum_apdus": 57, "legacy_exact": true}
+    },
+    "c60": {
+      "image": "fw/Fullflash/C60/v.27/C60_SW27_LG95_00432911_flash-intel_fullflash.bin",
+      "sha256": "84587b84321e4b89672a816f72707c14eb1d0bc187e8d73d9e9dfbd5bd247b50",
+      "topology": [{"role": "primary", "model": "w30-128mbit-top", "size": 16777216}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x01dd58", "minimum_frames": 1},
+      "ui": {"trigger_frame": 1, "response_frame": 2, "key": "soft-left", "maximum_ticks": 40000000},
+      "sim": {"minimum_ticks": 22000000, "minimum_apdus": 1}
+    },
+    "cf62": {
+      "image": "fw/Fullflash/CF62/v.07/CF62_SW07_LG4_00174251_flash-amd_fullflash.bin",
+      "sha256": "a3492d48cb065d3102bc0128e7721b8e6d826d5c7e5b1955b46ae14de4c8aab3",
+      "topology": [{"role": "primary", "model": "am29lv128mh", "size": 16777216}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x83c3d2", "minimum_frames": 2},
+      "ui": {"trigger_frame": 2, "response_frame": 3, "key": "soft-left", "maximum_ticks": 50000000},
+      "sim": {"minimum_ticks": 20000000, "minimum_apdus": 1},
+      "alternates": [
+        {"name": "sw12-intel", "image": "fw/Fullflash/CF62/v.12/CF62_SW12_LG4_00851658_repair_flash-intel_fullflash.bin", "sha256": "34f730589eca7a473489366409c7a95e7d0c00becb103cf2e241957da7c947ec", "topology": [{"role": "primary", "model": "w30-128mbit-top", "size": 16777216}]},
+        {"name": "sw21-amd", "image": "fw/Fullflash/CF62/v.21/CF62_SW21_LG3_00713106_flash-amd_fullflash.bin", "sha256": "eadd9650c560ac6eedfd5de48ad6f1403b28471f1583685ed1d2aead7d5248d0", "topology": [{"role": "primary", "model": "am29lv128mh", "size": 16777216}]}
+      ]
+    },
+    "m55": {
+      "image": "fw/M55/v.91/ff/M55_91_Joker_BCoreBug_noTP.bin",
+      "sha256": "d274a6cb85651e5ad846a157bc6c18373f0f2db784c88a0b11e59f563975b26d",
+      "topology": [{"role": "primary", "model": "am29lv128mh", "size": 16777216}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x01b5c2", "minimum_frames": 1},
+      "ui": {"trigger_frame": 1, "response_frame": 2, "key": "soft-left", "maximum_ticks": 50000000},
+      "sim": {"minimum_ticks": 100000000, "minimum_apdus": 1, "workflow": "live-post-dialog-apdu-frontier"}
+    },
+    "mc60": {
+      "image": "fw/MC60/v.13/ff/Joker_Normal_TP.bin",
+      "sha256": "5b50aefc95b6e9730439d929ea3c1f1a08d516f7a1d9be070e5c81cdd7d6010f",
+      "topology": [{"role": "primary", "model": "am29lv128mh", "size": 16777216}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x9d3e3a", "minimum_frames": 1},
+      "ui": {"trigger_frame": 1, "response_frame": 2, "key": "soft-left", "maximum_ticks": 70000000},
+      "sim": {"minimum_ticks": 20000000, "minimum_apdus": 1}
+    },
+    "s55": {
+      "image": "fw/Fullflash/S55/v.91/S55_SW91_LG91_52495827-1_bootcore-bug_before-patch_fullflash.bin",
+      "sha256": "0d48bdf90435520a3957116f35864db24ae1fb3d63209c3bac78ad2ec6ee36b7",
+      "topology": [{"role": "primary", "model": "w30-64mbit-top", "size": 8388608}, {"role": "secondary", "model": "m58lw064d", "size": 4194304}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "performance_baseline_ticks_per_s": 4640000,
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x01b6a2", "minimum_frames": 1},
+      "ui": {"trigger_frame": 1, "response_frame": 2, "key": "soft-left", "maximum_ticks": 50000000},
+      "sim": {"minimum_ticks": 75800000, "minimum_apdus": 1, "workflow": "s55-flash-menu", "key_presses": [[42450000, "left"], [44700000, "left"], [46500000, "left"], [50800000, "left"], [54550000, "left"], [60350000, "right"], [61400000, "right"], [67450000, "right"], [70000000, "8"], [75250000, "down"]]}
+    },
+    "sl55": {
+      "image": "fw/Fullflash/SL55/v.09/SL55_SW09_LG4_4de51b5b_no-coldboot_fullflash.bin",
+      "sha256": "4de51b5b6a516440e31192c11f987dc9a0af5cf2a89414e70ae834ebe8af0884",
+      "topology": [{"role": "primary", "model": "w30-64mbit-top", "size": 8388608}, {"role": "secondary", "model": "m58lw064d", "size": 4194304}],
+      "identity": {"kind": "overlay", "path": "cemu/eeprom.json"},
+      "no_sim": {"minimum_ticks": 20000000, "expected_pc": "0x01dcec", "minimum_frames": 1},
+      "ui": {"trigger_frame": 1, "response_frame": 2, "key": "soft-left", "maximum_ticks": 50000000},
+      "sim": {"minimum_ticks": 43300000, "minimum_apdus": 1, "workflow": "sl55-flash-menu", "key_presses": [[39000000, "left"], [39800000, "left"], [40600000, "left"]]},
+      "alternates": [
+        {"name": "sw20-aircheck", "image": "fw/corpus/SL55/synth/sl55sw209111-180688-3dd4bd1019be.bin", "sha256": "3dd4bd1019be1015f7dc906e430182c0f97f3ea99205b6029c816283d2d26f63", "topology": [{"role": "primary", "model": "w30-64mbit-top", "size": 8388608}, {"role": "secondary", "model": "m58lw064d", "size": 4194304}], "confirm": {"minimum_ticks": 130000000, "trigger_frame": 10, "key": "soft-left", "key_presses": [[100000000, "soft-left"]], "required_frame_sha256": "27e9e2a723d336a9256c63affe30ff4210de3829f3a5aa0ad9af81ba4fa2f388"}}
+      ]
+    }
+  }
+}

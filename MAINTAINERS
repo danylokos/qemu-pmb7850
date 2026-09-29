@@ -245,6 +245,47 @@ F: gdbstub/gdb-xml/avr-cpu.xml
 F: target/avr/
 F: tests/functional/avr/
 
+C166S TCG CPUs
+M: Danylo Kostyshyn <danylo.kostyshyn@gmail.com>
+S: Maintained
+F: configs/devices/c166-softmmu/
+F: configs/targets/c166-softmmu.mak
+F: gdbstub/gdb-xml/c166-core.xml
+F: hw/block/am29lv.c
+F: hw/block/m58lw064d.c
+F: hw/block/w30.c
+F: hw/block/x55_nor.[ch]
+F: hw/block/x55_nor_trace.c
+F: hw/c166/
+F: hw/c166/siemens_x55/
+F: hw/display/pcf8833.c
+F: hw/display/pcf8813.c
+F: hw/display/s6b33bx.c
+F: hw/display/x55_lcd_common.[ch]
+F: hw/display/x55_lcd_sweep.[ch]
+F: hw/mem/siemens_x55_ram.c
+F: include/hw/block/am29lv.h
+F: include/hw/block/m58lw064d.h
+F: include/hw/block/w30.h
+F: include/hw/block/x55_nor_trace.h
+F: include/hw/block/x55_nor_view.h
+F: include/hw/c166/
+F: include/hw/c166/siemens_x55/
+F: include/hw/display/pcf8833.h
+F: include/hw/display/pcf8813.h
+F: include/hw/display/s6b33bx.h
+F: include/hw/mem/siemens_x55_ram.h
+F: scripts/c166/
+F: scripts/pmb7850/
+F: target/c166/
+F: tests/qtest/c166-am29-test.c
+F: tests/functional/c166/
+F: tests/qtest/c166-m58-test.c
+F: tests/qtest/c166-w30-test.c
+F: tests/qtest/c166-x55-test.c
+F: tests/qtest/pmb7850-soc-test.c
+F: tests/qtest/siemens-c55-test.c
+
 Hexagon TCG CPUs
 M: Brian Cain <brian.cain@oss.qualcomm.com>
 R: Pierrick Bouvier <pierrick.bouvier@oss.qualcomm.com>

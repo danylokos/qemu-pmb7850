@@ -1,4 +1,7 @@
 system_ss.add(files('model.c'))
+system_ss.add(when: 'CONFIG_PMB7850',
+              if_true: files('x55_audio.c', 'x55_codec.c',
+                             'x55_speaker.c', 'x55_stream.c'))
 system_ss.add(when: 'CONFIG_AC97', if_true: files('ac97.c'))
 system_ss.add(when: 'CONFIG_ADLIB', if_true: files('fmopl.c', 'adlib.c'))
 system_ss.add(when: 'CONFIG_ASC', if_true: files('asc.c'))

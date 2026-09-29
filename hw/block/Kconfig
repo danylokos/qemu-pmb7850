@@ -19,6 +19,21 @@ config PFLASH_CFI01
 config PFLASH_CFI02
     bool
 
+config M58LW064D
+    bool
+    select X55_NOR_TRACE
+
+config AM29LV
+    bool
+    select X55_NOR_TRACE
+
+config W30
+    bool
+    select X55_NOR_TRACE
+
+config X55_NOR_TRACE
+    bool
+
 config VIRTIO_BLK
     bool
     default y

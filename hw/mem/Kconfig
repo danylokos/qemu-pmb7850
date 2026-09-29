@@ -20,3 +20,6 @@ config CXL_MEM_DEVICE
 config SP_MEM
     bool
     select MEM_DEVICE
+
+config SIEMENS_X55_RAM
+    bool

@@ -1,5 +1,9 @@
 # See docs/devel/tracing.rst for syntax documentation.
 
+# x55_nor_trace.c
+x55_nor_read(uint64_t tick, uint64_t icount, uint32_t pc, unsigned chip, uint32_t offset, uint32_t addr, uint32_t value, unsigned size, bool array, const char *source) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x chip=%u offset=0x%x addr=0x%x value=0x%x size=%u array=%d source=%s"
+x55_nor_mutation(uint64_t tick, uint64_t icount, uint32_t pc, unsigned chip, uint32_t offset, uint32_t size, const char *operation, uint64_t value) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x chip=%u offset=0x%x size=%u operation=%s value=0x%" PRIx64
+
 # fdc.c
 fdc_ioport_read(uint8_t reg, uint8_t value) "read reg 0x%02x val 0x%02x"
 fdc_ioport_write(uint8_t reg, uint8_t value) "write reg 0x%02x val 0x%02x"
@@ -43,6 +47,30 @@ pflash_write_invalid_command(const char *name, uint8_t cmd) "%s: invalid command
 pflash_write_invalid_state(const char *name, uint8_t cmd, int wc) "%s: invalid command state 0x%02x (wc %d)"
 pflash_write_start(const char *name, uint8_t cmd) "%s: starting command 0x%02x"
 pflash_write_unknown(const char *name, uint8_t cmd) "%s: unknown command 0x%02x"
+
+# m58lw064d.c
+m58lw064d_read(uint64_t icount, uint32_t pc, const char *view, uint64_t offset, unsigned size, uint64_t value, const char *mode) "icount=%" PRIu64 " pc=0x%06x view=%s offset=0x%06" PRIx64 " size=%u value=0x%04" PRIx64 " mode=%s"
+m58lw064d_command(uint64_t icount, uint32_t pc, const char *view, uint64_t offset, unsigned size, uint64_t value, const char *mode, uint8_t status, const char *phase, const char *buffer) "icount=%" PRIu64 " pc=0x%06x view=%s offset=0x%06" PRIx64 " size=%u value=0x%04" PRIx64 " mode=%s status=0x%02x phase=%s buffer=%s"
+m58lw064d_program(uint64_t icount, uint32_t pc, uint32_t offset, unsigned size, uint64_t value, bool valid, uint8_t status) "icount=%" PRIu64 " pc=0x%06x offset=0x%06x size=%u value=0x%04" PRIx64 " valid=%d status=0x%02x"
+m58lw064d_erase(uint64_t icount, uint32_t pc, uint32_t offset, uint32_t bytes, uint8_t status) "icount=%" PRIu64 " pc=0x%06x offset=0x%06x bytes=0x%x status=0x%02x"
+m58lw064d_buffer(uint64_t icount, uint32_t pc, const char *action, uint32_t offset, unsigned left, unsigned count) "icount=%" PRIu64 " pc=0x%06x action=%s offset=0x%06x left=%u count=%u"
+m58lw064d_persistence(uint64_t icount, uint32_t pc, uint32_t offset, uint32_t bytes, int result) "icount=%" PRIu64 " pc=0x%06x offset=0x%06x bytes=0x%x result=%d"
+m58lw064d_reset(uint64_t icount, uint32_t pc) "icount=%" PRIu64 " pc=0x%06x reset"
+
+# am29lv.c
+am29lv_read(uint64_t icount, uint32_t pc, const char *view, uint64_t offset, unsigned size, uint64_t value, const char *mode, bool erase_active, bool erase_suspended, bool status) "icount=%" PRIu64 " pc=0x%06x view=%s offset=0x%06" PRIx64 " size=%u value=0x%04" PRIx64 " mode=%s erase-active=%d erase-suspended=%d status=%d"
+am29lv_command(uint64_t icount, uint32_t pc, const char *view, uint64_t offset, unsigned size, uint64_t value, const char *mode, const char *phase) "icount=%" PRIu64 " pc=0x%06x view=%s offset=0x%06" PRIx64 " size=%u value=0x%04" PRIx64 " mode=%s phase=%s"
+am29lv_program(uint64_t icount, uint32_t pc, uint32_t offset, unsigned size, uint64_t value, bool valid) "icount=%" PRIu64 " pc=0x%06x offset=0x%06x size=%u value=0x%04" PRIx64 " valid=%d"
+am29lv_erase(uint64_t icount, uint32_t pc, const char *action, uint32_t offset, uint32_t remaining_ticks) "icount=%" PRIu64 " pc=0x%06x action=%s offset=0x%06x remaining-ticks=%u"
+am29lv_persistence(uint64_t icount, uint32_t pc, uint32_t offset, uint32_t bytes, int result) "icount=%" PRIu64 " pc=0x%06x offset=0x%06x bytes=0x%x result=%d"
+am29lv_reset(uint64_t icount, uint32_t pc) "icount=%" PRIu64 " pc=0x%06x reset"
+
+# w30.c
+w30_read(uint64_t icount, uint32_t pc, const char *view, uint64_t offset, unsigned size, uint64_t value, const char *mode, const char *operation) "icount=%" PRIu64 " pc=0x%06x view=%s offset=0x%06" PRIx64 " size=%u value=0x%04" PRIx64 " mode=%s operation=%s"
+w30_command(uint64_t icount, uint32_t pc, const char *view, uint64_t offset, unsigned size, uint64_t value, const char *mode, const char *phase, const char *operation) "icount=%" PRIu64 " pc=0x%06x view=%s offset=0x%06" PRIx64 " size=%u value=0x%04" PRIx64 " mode=%s phase=%s operation=%s"
+w30_operation(uint64_t icount, uint32_t pc, const char *action, const char *operation, uint32_t offset, int64_t remaining_ns) "icount=%" PRIu64 " pc=0x%06x action=%s operation=%s offset=0x%06x remaining-ns=%" PRId64
+w30_persistence(uint64_t icount, uint32_t pc, uint32_t offset, uint32_t bytes, int result) "icount=%" PRIu64 " pc=0x%06x offset=0x%06x bytes=0x%x result=%d"
+w30_reset(uint64_t icount, uint32_t pc) "icount=%" PRIu64 " pc=0x%06x reset"
 
 # virtio-blk.c
 virtio_blk_req_complete(void *vdev, void *req, int status) "vdev %p req %p status %d"
@@ -111,3 +139,7 @@ swim_iwmctrl_read(int reg, const char *name, unsigned size, uint64_t value) "reg
 swim_iwmctrl_write(int reg, const char *name, unsigned size, uint64_t value) "reg=%d [%s] size=%u value=0x%"PRIx64
 swim_switch_to_ism(void) "switch from IWM to ISM mode"
 swim_switch_to_iwm(void) "switch from ISM to IWM mode"
+
+# x55_nor.c: host views/storage, separate from physical read/mutation events
+x55_nor_mapping(uint64_t tick, uint64_t icount, uint32_t pc, unsigned chip, uint32_t offset, uint32_t size, bool enabled) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x chip=%u offset=0x%x size=%u enabled=%d"
+x55_nor_flush(uint64_t tick, uint64_t icount, uint32_t pc, unsigned chip, uint32_t offset, uint32_t size) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x chip=%u offset=0x%x size=%u"

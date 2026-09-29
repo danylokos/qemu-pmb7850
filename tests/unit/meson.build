@@ -62,6 +62,14 @@ if have_system or have_tools
   endif
 endif
 
+if config_all_devices.has_key('CONFIG_PMB7850')
+  tests += {'test-x55-codec': ['../../hw/audio/x55_codec.c']}
+  tests += {'test-x55-speaker': ['../../hw/audio/x55_speaker.c']}
+  tests += {'test-x55-stream': ['../../hw/audio/x55_stream.c',
+                              '../../hw/audio/x55_speaker.c',
+                              '../../hw/audio/x55_codec.c']}
+endif
+
 if have_block
   tests += {
     'test-coroutine': [testblock],

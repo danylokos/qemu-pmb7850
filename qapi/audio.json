@@ -79,13 +79,22 @@
 # @nsamples: set the number of samples per read/write calls
 #     (default to 480, 10ms at 48kHz).
 #
+# @direct-pcm: accept one already-timed 48 kHz mono S16LE playback
+#     stream without mixing, resampling, padding or backend pacing.
+#     Every write, including a final partial block, is forwarded
+#     immediately.
+#     Capture is unaffected.  For devices owning their terminal
+#     speaker clock and mixer (default false).
+#     Since 11.1.1 (C166 fork).
+#
 # Since: 10.0
 ##
 { 'struct': 'AudiodevDBusOptions',
   'data': {
     '*in':  'AudiodevPerDirectionOptions',
     '*out': 'AudiodevPerDirectionOptions',
-    '*nsamples': 'uint32'} }
+    '*nsamples': 'uint32',
+    '*direct-pcm': 'bool'} }
 
 ##
 # @AudiodevAlsaPerDirectionOptions:

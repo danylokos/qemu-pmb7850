@@ -1,5 +1,13 @@
 # See docs/devel/tracing.rst for syntax documentation.
 
+# x55_audio.c: calibrated digital output, unknown physical XBUS consumer.
+x55_audio_tail(uint64_t tick, uint64_t icount, uint32_t pc, int store, uint64_t offset, unsigned bytes, const char *outcome) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x store=%d offset=0x%" PRIx64 " bytes=%u outcome=%s"
+x55_audio_pcm(uint64_t tick, uint64_t icount, uint32_t pc, uint64_t sequence, unsigned frames, const char *pcm) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x sequence=%" PRIu64 " frames=%u pcm=%s"
+x55_audio_reset(uint64_t tick, uint64_t icount, uint32_t pc, const char *reason, uint64_t sequence) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x reason=%s sequence=%" PRIu64
+x55_audio_packet(uint64_t tick, uint64_t icount, uint32_t pc, const char *phase, unsigned command, unsigned kind, uint64_t sequence, unsigned depth, const char *outcome, const char *bytes) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x phase=%s command=0x%04x kind=%u sequence=%" PRIu64 " depth=%u outcome=%s bytes=%s"
+x55_audio_source(uint64_t tick, uint64_t icount, uint32_t pc, int ram, uint64_t offset, unsigned bytes, unsigned frames, unsigned rate, unsigned channels) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x ram=%d offset=0x%" PRIx64 " bytes=%u frames=%u rate=%u channels=%u"
+x55_audio_ringer(uint64_t tick, uint64_t icount, uint32_t pc, bool high) "tick=%" PRIu64 " icount=%" PRIu64 " pc=0x%06x high=%d"
+
 # cs4231.c
 cs4231_mem_readl_dreg(uint32_t reg, uint32_t ret) "read dreg %d: 0x%02x"
 cs4231_mem_readl_reg(uint32_t reg, uint32_t ret) "read reg %d: 0x%08x"

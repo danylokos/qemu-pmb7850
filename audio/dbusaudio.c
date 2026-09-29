@@ -48,6 +48,7 @@
 OBJECT_DECLARE_SIMPLE_TYPE(AudioDbus, AUDIO_DBUS)
 
 static AudioBackendClass *audio_dbus_parent_class;
+typedef struct DBusDirectVoice DBusDirectVoice;
 
 struct AudioDbus {
     AudioMixengBackend parent_obj;
@@ -58,6 +59,7 @@ struct AudioDbus {
     QemuDBusDisplay1Audio *iface;
     GHashTable *out_listeners;
     GHashTable *in_listeners;
+    DBusDirectVoice *direct;
 };
 
 
@@ -73,6 +75,11 @@ typedef struct DBusVoiceOut {
     bool has_volume;
     Volume volume;
 } DBusVoiceOut;
+
+struct DBusDirectVoice {
+    SWVoiceOut sw;
+    DBusVoiceOut out;
+};
 
 typedef struct DBusVoiceIn {
     HWVoiceIn hw;
@@ -413,6 +420,147 @@ dbus_enable_in(HWVoiceIn *hw, bool enable)
     }
 }
 
+#define DBUS_DIRECT_MAX_PENDING (8 * 48000 * 2)
+
+static bool dbus_direct(AudioBackend *be)
+{
+    return AUDIO_MIXENG_BACKEND(be)->dev->u.dbus.direct_pcm;
+}
+
+static SWVoiceOut *dbus_open_out(AudioBackend *be, SWVoiceOut *sw,
+                                const char *name, void *opaque,
+                                audio_callback_fn callback,
+                                const struct audsettings *settings)
+{
+    AudioDbus *da = AUDIO_DBUS(be);
+    DBusDirectVoice *voice;
+    struct audsettings as = *settings;
+
+    if (!dbus_direct(be)) {
+        return audio_dbus_parent_class->open_out(be, sw, name, opaque,
+                                                 callback, settings);
+    }
+    if (as.freq != 48000 || as.nchannels != 1 ||
+        as.fmt != AUDIO_FORMAT_S16 || as.big_endian ||
+        (da->direct && sw != &da->direct->sw)) {
+        return NULL;
+    }
+    if (da->direct) {
+        return sw;
+    }
+    voice = da->direct = g_new0(DBusDirectVoice, 1);
+    voice->sw.hw = &voice->out.hw;
+    voice->out.hw.s = AUDIO_MIXENG_BACKEND(be);
+    dbus_init_out(&voice->out.hw, &as);
+    return &voice->sw;
+}
+
+static void dbus_close_out(AudioBackend *be, SWVoiceOut *sw)
+{
+    AudioDbus *da = AUDIO_DBUS(be);
+
+    if (!dbus_direct(be)) {
+        audio_dbus_parent_class->close_out(be, sw);
+        return;
+    }
+    assert(da->direct && sw == &da->direct->sw);
+    dbus_fini_out(&da->direct->out.hw);
+    g_clear_pointer(&da->direct, g_free);
+}
+
+static bool dbus_is_active_out(AudioBackend *be, SWVoiceOut *sw)
+{
+    return dbus_direct(be) ? AUDIO_DBUS(be)->direct->out.enabled :
+           audio_dbus_parent_class->is_active_out(be, sw);
+}
+
+static void dbus_set_active_out(AudioBackend *be, SWVoiceOut *sw, bool on)
+{
+    if (dbus_direct(be)) {
+        dbus_enable_out(&AUDIO_DBUS(be)->direct->out.hw, on);
+    } else {
+        audio_dbus_parent_class->set_active_out(be, sw, on);
+    }
+}
+
+static void dbus_set_volume_out(AudioBackend *be, SWVoiceOut *sw, Volume *vol)
+{
+    if (dbus_direct(be)) {
+        dbus_volume_out(&AUDIO_DBUS(be)->direct->out.hw, vol);
+    } else {
+        audio_dbus_parent_class->set_volume_out(be, sw, vol);
+    }
+}
+
+static int dbus_buffer_size_out(AudioBackend *be, SWVoiceOut *sw)
+{
+    return dbus_direct(be) ? DBUS_DIRECT_MAX_PENDING :
+           audio_dbus_parent_class->get_buffer_size_out(be, sw);
+}
+
+static void dbus_direct_write_done(GObject *object, GAsyncResult *result,
+                                    gpointer opaque)
+{
+    guint pending = GPOINTER_TO_UINT(
+        g_object_get_data(object, "direct-pending"));
+    guint size = GPOINTER_TO_UINT(opaque);
+    g_autoptr(GError) error = NULL;
+
+    assert(pending >= size);
+    g_object_set_data(object, "direct-pending",
+                      GUINT_TO_POINTER(pending - size));
+    if (!qemu_dbus_display1_audio_out_listener_call_write_finish(
+            QEMU_DBUS_DISPLAY1_AUDIO_OUT_LISTENER(object), result, &error)) {
+        /* A failed or stalled receiver cannot accumulate an unbounded FIFO. */
+        g_dbus_connection_close(
+            g_dbus_proxy_get_connection(G_DBUS_PROXY(object)),
+            NULL, NULL, NULL);
+    }
+}
+
+static size_t dbus_write(AudioBackend *be, SWVoiceOut *sw,
+                          void *buf, size_t size)
+{
+    AudioDbus *da = AUDIO_DBUS(be);
+    GHashTableIter iter;
+    QemuDBusDisplay1AudioOutListener *listener;
+    g_autoptr(GVariant) data = NULL;
+
+    if (!dbus_direct(be)) {
+        return audio_dbus_parent_class->write(be, sw, buf, size);
+    }
+    if (!size || !da->direct->out.enabled || (size & 1) ||
+        size > DBUS_DIRECT_MAX_PENDING) {
+        return 0;
+    }
+    data = g_variant_ref_sink(g_variant_new_fixed_array(
+        G_VARIANT_TYPE_BYTE, buf, size, 1));
+    g_hash_table_iter_init(&iter, da->out_listeners);
+    while (g_hash_table_iter_next(&iter, NULL, (void **)&listener)) {
+        GObject *object = G_OBJECT(listener);
+        guint pending = GPOINTER_TO_UINT(
+            g_object_get_data(object, "direct-pending"));
+
+        if (g_object_get_data(object, "direct-failed")) {
+            continue;
+        }
+        if (size > DBUS_DIRECT_MAX_PENDING - pending) {
+            g_object_set_data(object, "direct-failed", GUINT_TO_POINTER(1));
+            g_dbus_connection_close(
+                g_dbus_proxy_get_connection(G_DBUS_PROXY(listener)),
+                NULL, NULL, NULL);
+            continue;
+        }
+        g_object_set_data(object, "direct-pending",
+                          GUINT_TO_POINTER(pending + size));
+        qemu_dbus_display1_audio_out_listener_call_write(
+            listener, (uintptr_t)&da->direct->out.hw, data,
+            G_DBUS_CALL_FLAGS_NONE, 5000, NULL, dbus_direct_write_done,
+            GUINT_TO_POINTER(size));
+    }
+    return size;
+}
+
 static bool
 audio_dbus_realize(AudioBackend *abe, Audiodev *dev, Error **errp)
 {
@@ -439,6 +587,10 @@ audio_dbus_finalize(Object *obj)
 {
     AudioDbus *da = AUDIO_DBUS(obj);
 
+    if (da->direct) {
+        dbus_fini_out(&da->direct->out.hw);
+        g_clear_pointer(&da->direct, g_free);
+    }
     if (da->server) {
         g_dbus_object_manager_server_unexport(da->server,
                                               DBUS_DISPLAY1_AUDIO_PATH);
@@ -591,6 +743,17 @@ dbus_audio_register_listener(AudioMixengBackend *s,
     if (out) {
         HWVoiceOut *hw;
 
+        if (da->direct) {
+            DBusVoiceOut *vo = &da->direct->out;
+            QemuDBusDisplay1AudioOutListener *l =
+                QEMU_DBUS_DISPLAY1_AUDIO_OUT_LISTENER(listener);
+
+            dbus_init_out_listener(l, &vo->hw);
+            qemu_dbus_display1_audio_out_listener_call_set_enabled(
+                l, (uintptr_t)&vo->hw, vo->enabled,
+                G_DBUS_CALL_FLAGS_NONE, -1, NULL, NULL, NULL);
+        }
+
         QLIST_FOREACH(hw, &s->hw_head_out, entries) {
             DBusVoiceOut *vo = container_of(hw, DBusVoiceOut, hw);
             QemuDBusDisplay1AudioOutListener *l =
@@ -699,6 +862,13 @@ static void audio_dbus_class_init(ObjectClass *klass, const void *data)
 
     b->realize = audio_dbus_realize;
     b->set_dbus_server = dbus_audio_set_server;
+    b->open_out = dbus_open_out;
+    b->close_out = dbus_close_out;
+    b->is_active_out = dbus_is_active_out;
+    b->set_active_out = dbus_set_active_out;
+    b->set_volume_out = dbus_set_volume_out;
+    b->write = dbus_write;
+    b->get_buffer_size_out = dbus_buffer_size_out;
     k->max_voices_out = INT_MAX;
     k->max_voices_in = INT_MAX;
     k->voice_size_out = sizeof(DBusVoiceOut);

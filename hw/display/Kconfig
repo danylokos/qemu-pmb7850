@@ -41,6 +41,25 @@ config SSD0303
 config SSD0323
     bool
 
+config PCF8813
+    bool
+    select X55_LCD_COMMON
+
+config HM17
+    bool
+    select X55_LCD_COMMON
+
+config X55_LCD_COMMON
+    bool
+
+config PCF8833
+    bool
+    select X55_LCD_COMMON
+
+config S6B33BX
+    bool
+    select X55_LCD_COMMON
+
 config VGA_PCI
     bool
     default y if PCI_DEVICES

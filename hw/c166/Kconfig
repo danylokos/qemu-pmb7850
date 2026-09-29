@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+config C166_TEST
+    bool
+    default y
+    depends on C166

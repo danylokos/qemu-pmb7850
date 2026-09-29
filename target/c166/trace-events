@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# C166 CPU trace events
+c166_irq_request(unsigned vec, unsigned lvl, bool level) "vector=%u ilvl=%u level=%d"
+c166_irq_check(uint64_t icount, unsigned pc, unsigned vec, unsigned lvl, bool pec, unsigned psw, unsigned kind, unsigned value, unsigned count, unsigned extr) "icount=%" PRIu64 " pc=0x%06x vector=%u ilvl=%u pec=%d psw=0x%04x ext=%u:0x%03x/%u extr=%u"
+c166_irq_accept(uint64_t icount, unsigned vec, unsigned lvl, unsigned pc) "icount=%" PRIu64 " vector=%u ilvl=%u pc=0x%06x"
+c166_window(uint64_t icount, unsigned pc, unsigned opcode, const char *action, unsigned psw, unsigned kind, unsigned value, unsigned count, unsigned extr) "icount=%" PRIu64 " pc=0x%06x opcode=0x%04x %s psw=0x%04x ext=%u:0x%03x/%u extr=%u"
+
+# Instruction restoration for watchpoint / deterministic I/O replay.
+c166_restore(uint32_t pc, uint64_t count, uint64_t entry) "pc=0x%06x count=%" PRIu64 " entry=%" PRIu64 ""
+c166_watch_stop(uint32_t pc, uint64_t count, uint32_t addr, unsigned flags) "pc=0x%06x count=%" PRIu64 " addr=0x%06x flags=0x%x"
+c166_stack_trap(uint64_t count, uint32_t source, uint32_t next, uint32_t sp, uint32_t psw, uint32_t tfr, uint32_t request) "count=%" PRIu64 " source=0x%06x next=0x%06x sp=0x%04x psw=0x%04x tfr=0x%04x request=0x%04x"
+c166_entry(uint32_t pc, uint64_t count, unsigned sp, unsigned cp, unsigned psw) "pc=0x%06x count=%" PRIu64 " sp=0x%04x cp=0x%04x psw=0x%04x"
+c166_access(uint32_t pc, uint64_t count, uint32_t addr, unsigned size, bool write, uint32_t value) "pc=0x%06x count=%" PRIu64 " addr=0x%06x size=%u write=%d value=0x%x"
+c166_trap_delivery(uint64_t count, uint32_t source, uint32_t next, uint32_t sp, uint32_t tfr, uint32_t request, uint32_t depth, uint32_t window) "count=%" PRIu64 " source=0x%06x next=0x%06x sp=0x%04x tfr=0x%04x request=0x%04x depth=%u window=%u"
+c166_trap_pending(uint64_t count, uint32_t pc, uint32_t tfr, uint32_t delay_of, uint32_t delay_uf, uint32_t window, uint32_t class_a, uint32_t class_b) "count=%" PRIu64 " pc=0x%06x tfr=0x%04x delay=%u/%u window=%u active=%u/%u"

@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+     SPDX-License-Identifier: GPL-2.0-or-later
+-->
+<!DOCTYPE feature SYSTEM "gdb-target.dtd">
+<feature name="org.qemu.c166.core">
+  <reg name="r0" bitsize="16" type="uint16"/>
+  <reg name="r1" bitsize="16" type="uint16"/>
+  <reg name="r2" bitsize="16" type="uint16"/>
+  <reg name="r3" bitsize="16" type="uint16"/>
+  <reg name="r4" bitsize="16" type="uint16"/>
+  <reg name="r5" bitsize="16" type="uint16"/>
+  <reg name="r6" bitsize="16" type="uint16"/>
+  <reg name="r7" bitsize="16" type="uint16"/>
+  <reg name="r8" bitsize="16" type="uint16"/>
+  <reg name="r9" bitsize="16" type="uint16"/>
+  <reg name="r10" bitsize="16" type="uint16"/>
+  <reg name="r11" bitsize="16" type="uint16"/>
+  <reg name="r12" bitsize="16" type="uint16"/>
+  <reg name="r13" bitsize="16" type="uint16"/>
+  <reg name="r14" bitsize="16" type="uint16"/>
+  <reg name="r15" bitsize="16" type="uint16"/>
+  <reg name="dpp0" bitsize="16" type="uint16"/>
+  <reg name="dpp1" bitsize="16" type="uint16"/>
+  <reg name="dpp2" bitsize="16" type="uint16"/>
+  <reg name="dpp3" bitsize="16" type="uint16"/>
+  <reg name="cp" bitsize="16" type="uint16"/>
+  <reg name="sp" bitsize="16" type="uint16"/>
+  <reg name="stkov" bitsize="16" type="uint16"/>
+  <reg name="stkun" bitsize="16" type="uint16"/>
+  <reg name="mdh" bitsize="16" type="uint16"/>
+  <reg name="mdl" bitsize="16" type="uint16"/>
+  <reg name="mdc" bitsize="16" type="uint16"/>
+  <reg name="psw" bitsize="16" type="uint16"/>
+  <reg name="csp" bitsize="16" type="uint16"/>
+  <reg name="ip" bitsize="16" type="uint16"/>
+  <reg name="pc" bitsize="32" type="code_ptr"/>
+  <reg name="ext_kind" bitsize="16" type="uint16"/>
+  <reg name="ext_value" bitsize="16" type="uint16"/>
+  <reg name="ext_count" bitsize="16" type="uint16"/>
+  <reg name="extr" bitsize="16" type="uint16"/>
+  <reg name="guest_icount" bitsize="64" type="uint64"/>
+  <reg name="tfr" bitsize="16" type="uint16"/>
+  <reg name="syscon" bitsize="16" type="uint16"/>
+  <reg name="idle" bitsize="16" type="uint16"/>
+</feature>

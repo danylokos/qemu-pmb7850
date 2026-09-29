@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# C166 synthetic machine trace events
+c166_test_mmio(unsigned offset, uint64_t value) "offset=0x%x value=0x%" PRIx64
+c166_test_mmio_read(uint64_t offset, unsigned value, unsigned size) "offset=0x%" PRIx64 " value=0x%x size=%u"

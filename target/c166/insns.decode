@@ -1,0 +1,168 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Infineon C166 instruction decode. Words are fetched little-endian.
+
+&rr            dst src
+&ri4           dst imm
+&reg           reg
+&ccrel         cc rel
+&cc            cc
+&ccreg         cc reg
+&rel           rel
+&seg           seg
+&alu_rr        kind dst src
+&alu_reg       kind reg
+&alu_compact   kind dst operand
+&unary         reg
+&shift_i       dst count
+&loop_reg      reg
+&div           reg mirror
+&low_reg       reg
+&bit           bit bitoff
+&window_i      mode count
+&window_r      mode count reg
+&trap          trap
+
+@rr            dst:4 src:4 .... ....             &rr
+@ri4           imm:4 dst:4 .... ....             &ri4
+@reg           reg:8 .... ....                   &reg
+@ccrel         rel:s8 cc:4 ....                  &ccrel
+@cc            cc:4 0000 .... ....               &cc
+@ccreg         cc:4 reg:4 .... ....              &ccreg
+@rel           rel:s8 .... ....                  &rel
+@seg           seg:8 .... ....                   &seg
+@alu_rr        dst:4 src:4 0 kind:3 ....         &alu_rr
+@alu_reg       reg:8 0 kind:3 ....               &alu_reg
+@alu_compact   dst:4 operand:4 0 kind:3 ....      &alu_compact
+@unary         reg:4 0000 .... ....              &unary
+@shift_i       count:4 dst:4 .... ....            &shift_i
+@loop_reg      1111 reg:4 .... ....                &loop_reg
+@div           reg:4 mirror:4 .... ....             &div
+@low_reg       0000 reg:4 .... ....                 &low_reg
+@bit           bitoff:8 bit:4 ....                &bit
+@window_i      mode:2 count:2 0000 .... ....      &window_i
+@window_r      mode:2 count:2 reg:4 .... ....     &window_r
+@trap          trap:7 0 .... ....                 &trap
+
+NOP            0000 0000 1100 1100
+MOV_ri4        .... .... 1110 0000               @ri4
+MOVB_ri4       .... .... 1110 0001               @ri4
+MOV_rr         .... .... 1111 0000               @rr
+MOVB_rr        .... .... 1111 0001               @rr
+MOV_ri16       .... .... 1110 0110               @reg
+MOVB_ri16      .... .... 1110 0111               @reg
+MOV_rm16       .... .... 1111 0010               @reg
+MOVB_rm16      .... .... 1111 0011               @reg
+MOV_mr16       .... .... 1111 0110               @reg
+MOVB_mr16      .... .... 1111 0111               @reg
+MOV_idx_store  .... .... 1100 0100               @rr
+MOV_idx_load   .... .... 1101 0100               @rr
+MOVB_idx_store .... .... 1110 0100               @rr
+MOVB_idx_load  .... .... 1111 0100               @rr
+MOV_ind_load   .... .... 1010 1000               @rr
+MOV_post_load  .... .... 1001 1000               @rr
+MOV_ind_store  .... .... 1011 1000               @rr
+MOV_pre_store  .... .... 1000 1000               @rr
+MOV_mem_mem    .... .... 1100 1000               @rr
+MOV_mem_post   .... .... 1101 1000               @rr
+MOV_post_mem   .... .... 1110 1000               @rr
+MOVB_ind_load  .... .... 1010 1001               @rr
+MOVB_post_load .... .... 1001 1001               @rr
+MOVB_ind_store .... .... 1011 1001               @rr
+MOVB_pre_store .... .... 1000 1001               @rr
+MOVB_mem_mem   .... .... 1100 1001               @rr
+MOVB_mem_post  .... .... 1101 1001               @rr
+MOVB_post_mem  .... .... 1110 1001               @rr
+MOV_ind_mem    .... .... 1000 0100               @low_reg
+MOV_mem_ind    .... .... 1001 0100               @low_reg
+MOVB_ind_mem   .... .... 1010 0100               @low_reg
+MOVB_mem_ind   .... .... 1011 0100               @low_reg
+MOVBZ_rr       .... .... 1100 0000               @rr
+MOVBS_rr       .... .... 1101 0000               @rr
+MOVBZ_rm16     .... .... 1100 0010               @reg
+MOVBS_rm16     .... .... 1101 0010               @reg
+MOVBZ_mr16     .... .... 1100 0101               @reg
+MOVBS_mr16     .... .... 1101 0101               @reg
+JMPR           .... .... .... 1101               @ccrel
+JMPA           .... .... 1110 1010               @cc
+CALLA          .... .... 1100 1010               @cc
+CALLR          .... .... 1011 1011               @rel
+PCALL          .... .... 1110 0010               @reg
+JMPS           .... .... 1111 1010               @seg
+CALLS          .... .... 1101 1010               @seg
+JMPI           .... .... 1001 1100               @ccreg
+CALLI          .... .... 1010 1011               @ccreg
+RET            0000 0000 1100 1011
+RETP           .... .... 1110 1011               @reg
+RETS           0000 0000 1101 1011
+RETI           1000 1000 1111 1011
+PUSH           .... .... 1110 1100               @reg
+POP            .... .... 1111 1100               @reg
+PRIOR          .... .... 0010 1011               @rr
+SCXT_ri16      .... .... 1100 0110               @reg
+SCXT_rm16      .... .... 1101 0110               @reg
+ALU_rr         .... .... .... 0000               @alu_rr
+ALUB_rr        .... .... .... 0001               @alu_rr
+ALU_rm16       .... .... .... 0010               @alu_reg
+ALUB_rm16      .... .... .... 0011               @alu_reg
+ALU_mr16       .... .... .... 0100               @alu_reg
+ALUB_mr16      .... .... .... 0101               @alu_reg
+ALU_ri16       .... .... .... 0110               @alu_reg
+ALUB_ri16      .... .... .... 0111               @alu_reg
+ALU_compact    .... .... .... 1000               @alu_compact
+ALUB_compact   .... .... .... 1001               @alu_compact
+NEG            .... .... 1000 0001               @unary
+CPL            .... .... 1001 0001               @unary
+NEGB           .... .... 1010 0001               @unary
+CPLB           .... .... 1011 0001               @unary
+ROL_r          .... .... 0000 1100               @rr
+ROL_i          .... .... 0001 1100               @shift_i
+ROR_r          .... .... 0010 1100               @rr
+ROR_i          .... .... 0011 1100               @shift_i
+SHL_r          .... .... 0100 1100               @rr
+SHL_i          .... .... 0101 1100               @shift_i
+SHR_r          .... .... 0110 1100               @rr
+SHR_i          .... .... 0111 1100               @shift_i
+ASHR_r         .... .... 1010 1100               @rr
+ASHR_i         .... .... 1011 1100               @shift_i
+CMPI1_ri4      .... .... 1000 0000               @ri4
+CMPI2_ri4      .... .... 1001 0000               @ri4
+CMPD1_ri4      .... .... 1010 0000               @ri4
+CMPD2_ri4      .... .... 1011 0000               @ri4
+CMPI1_ri16     .... .... 1000 0110               @loop_reg
+CMPI2_ri16     .... .... 1001 0110               @loop_reg
+CMPD1_ri16     .... .... 1010 0110               @loop_reg
+CMPD2_ri16     .... .... 1011 0110               @loop_reg
+CMPI1_rm16     .... .... 1000 0010               @loop_reg
+CMPI2_rm16     .... .... 1001 0010               @loop_reg
+CMPD1_rm16     .... .... 1010 0010               @loop_reg
+CMPD2_rm16     .... .... 1011 0010               @loop_reg
+BCLR           .... .... .... 1110               @bit
+BSET           .... .... .... 1111               @bit
+BAND           .... .... 0110 1010               @reg
+BOR            .... .... 0101 1010               @reg
+BXOR           .... .... 0111 1010               @reg
+BMOV           .... .... 0100 1010               @reg
+BMOVN          .... .... 0011 1010               @reg
+BCMP           .... .... 0010 1010               @reg
+BFLDL          .... .... 0000 1010               @reg
+BFLDH          .... .... 0001 1010               @reg
+MUL            .... .... 0000 1011               @rr
+MULU           .... .... 0001 1011               @rr
+DIV            .... .... 0100 1011               @div
+DIVU           .... .... 0101 1011               @div
+DIVL           .... .... 0110 1011               @div
+DIVLU          .... .... 0111 1011               @div
+EXTI           .... .... 1101 0111               @window_i
+EXTRI          .... .... 1101 1100               @window_r
+ATOMIC_EXTR    .... .... 1101 0001               @window_i
+JB             .... .... 1000 1010               @reg
+JNB            .... .... 1001 1010               @reg
+JBC            .... .... 1010 1010               @reg
+JNBS           .... .... 1011 1010               @reg
+TRAP           .... .... 1001 1011               @trap
+DISWDT         0101 1010 1010 0101
+EINIT          0100 1010 1011 0101
+IDLE           0111 1000 1000 0111
+PWRDN          0110 1000 1001 0111
+SRST           0100 1000 1011 0111
+SRVWDT         0101 1000 1010 0111
